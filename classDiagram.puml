@@ -33,33 +33,45 @@ class Maze {
     vector<vector<int>> mazeLayout
     Position destination
     +Maze(int, int)
-    +generateMazePrim()
-    +isMoveValid(int, int): bool
-    +printMaze(Position): void
-    +getMazeLayout(): vector<vector<int>>
-    +isMazeSolved(Position): bool
-    +getDestination(): Position
-    +uploadMazeLayout(vector<vector<int>>): bool
-    +generateEmptyMaze(): void
     +addWall(int, int): void
+    +printMaze(Position): void
+    +isMazeSolved(Position): bool
+    +getMazeLayout(): vector<vector<int>> const&
+    +uploadMazeLayout(vector<vector<int>> const&): bool
+    +getDestination(): Position
     +setDestination(int, int): void
+}
+
+abstract class mazeGenerator {
+    +~mazeGenerator()
+    +generate(Maze&, bool isRefresh = false): void
+}
+
+class mazeGeneratorEmpty {
+    +mazeGeneratorEmpty()
+    +generate(Maze&, bool isRefresh = false): void
+}
+
+class mazeGeneratorPrim {
+    +mazeGeneratorPrim()
+    +generate(Maze&, bool isRefresh = false): void
 }
 
 class Mouse {
     Position position
     Maze &maze
     Maze &knownMaze
-    Logger<T> &logger
+    Logger<string> &logger
     vector<Position> path
-    vector<SensorData> obstacles
-    +Mouse(const Maze&, Logger<string>&, Maze&)
+    mazeGeneratorEmpty* emptyMazeGenerator
+    +Mouse(const Maze&, Logger<string>&, Maze&, mazeGeneratorEmpty*)
     +makeDecision(SensorData): void
     +move(Direction): void
     +getPosition(): Position
-    +findPath(Position, Position): vector<Position>
-    +calculateShortestPath(): void
+    +findPath(Position, Position, bool isFinal = false): vector<Position>
     +reset(): void
     +walkMazeStep(Logger<string>&, set<Position, less<Position>>&): void
+    +static canMove(int, int, const Maze&): bool
 }
 
 class Logger<T> {
@@ -81,40 +93,58 @@ class MainWindow {
     QLabel *visitedLabel
     QLabel *timeLabel
     QTimer *timer
-    int elapsedTime
-    int moveCount
-    bool exploring
-    SimulationState currentState
-    Maze &maze
-    Maze &emptyMaze
-    Logger<string> &logger
-    Mouse *mouse
-    +MainWindow(QWidget*, Maze&, Maze&, Logger<string>&, Mouse*)
+    Controller *controller
+    +MainWindow(QWidget*, Controller*)
     +drawMaze(vector<vector<int>> const&, Position const&, Position const&): void
     +updatePositionLabel(Position const&): void
     +updateVisitedLabel(int): void
     +updateStatusLabel(SimulationState): void
+    +updateTimer(): void
     +getStartButton(): QPushButton*
     +getStopButton(): QPushButton*
     +getGenerateButton(): QPushButton*
+    +onStart(): void
+    +onStop(): void
+    +onUpdate(): void
+    +resetData(): void
+}
+
+class Controller {
+    Maze &maze
+    Mouse *mouse
+    Logger<string> &logger
+    mazeGeneratorPrim *mazeGen
+    bool exploring
+    int elapsedTime
+    +Controller(Maze&, Mouse*, Logger<string>&, mazeGeneratorPrim*)
     +startSimulation(): void
     +stopSimulation(): void
     +updateMaze(): void
     +updateTimer(): void
-    +isExploring(): bool
     +resetData(): void
     +getCurrentState(): SimulationState
+    +isExploring(): bool
+    +getElapsedTime(): int
+    +getMousePosition(): Position
+    +getMazeLayout(): vector<vector<int>>
+    +getMazeDestination(): Position
+    +changePhase(SimulationState): void
 }
 
 Entity <|-- Mouse
 Mouse --> Maze
 Mouse --> SensorData
 Mouse --> Logger
+Mouse --> mazeGeneratorEmpty
 Maze --> Position
 Entity --> Direction
 Mouse --> Direction
-MainWindow --> Maze
-MainWindow --> Logger
-MainWindow --> Mouse
+MainWindow --> Controller
+Controller --> Maze
+Controller --> Mouse
+Controller --> Logger
+Controller --> mazeGeneratorPrim
+mazeGenerator <|-- mazeGeneratorEmpty
+mazeGenerator <|-- mazeGeneratorPrim
 
 @enduml

@@ -1,6 +1,6 @@
 #include "controller.h"
 
-Controller::Controller(Maze &maze, Mouse *mouse, Logger<std::string> &logger, mazeGenerator *mazeGenerator)
+Controller::Controller(Maze &maze, Mouse *mouse, Logger<std::string> &logger, mazeGeneratorPrim *mazeGenerator)
     : maze(maze), mouse(mouse), logger(logger), exploring(false), elapsedTime(0) {
     this->mazeGen = mazeGenerator;
 }

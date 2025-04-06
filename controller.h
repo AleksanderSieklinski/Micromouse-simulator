@@ -4,7 +4,6 @@
 #include "maze.h"
 #include "mouse.h"
 #include "logger.h"
-#include "mazegeneratorempty.h"
 #include "mazegeneratorprim.h"
 
 /**
@@ -29,7 +28,7 @@ public:
     * @param mouse The mouse object to be controlled.
     * @param logger The logger object for logging data.
     */
-    Controller(Maze &maze, Mouse *mouse, Logger<std::string> &logger, mazeGenerator *mazeGenerator);
+    Controller(Maze &maze, Mouse *mouse, Logger<std::string> &logger, mazeGeneratorPrim *mazeGenerator);
 
     /**
     * @brief Starts the simulation.
@@ -97,7 +96,7 @@ private:
     Maze &maze; ///< The maze object to be controlled.
     Mouse *mouse; ///< The mouse object to be controlled.
     Logger<std::string> &logger; ///< The logger object for logging data.
-    mazeGenerator *mazeGen; ///< The maze generator object.
+    mazeGeneratorPrim *mazeGen; ///< The maze generator object.
     bool exploring; ///< Flag indicating if the mouse is exploring the maze.
     int elapsedTime; ///< The elapsed time for the simulation.
 };
