@@ -2,8 +2,6 @@
 
 A **Micromouse** maze-solving simulator written in **C++17** with a **Qt Widgets** GUI and built with **CMake**. It generates a 16×16 maze (Prim’s algorithm), simulates a mouse exploring the maze, returning to start, and then running the final path.
 
-> Repo: `AleksanderSieklinski/Micromouse-simulator`
-
 ## Table of contents
 
 - [Features](#features)
@@ -155,27 +153,4 @@ The active maze is generated at startup and can be refreshed via the **Generate*
 - PlantUML source: `classDiagram.puml`
 - Rendered diagram: `classDiagram.png`
 
-If GitHub renders the PNG, you should see it below:
-
 ![Class diagram](classDiagram.png)
-
-## Troubleshooting
-
-- **CMake can’t find Qt**:
-  - Ensure Qt (Widgets) is installed.
-  - Provide `CMAKE_PREFIX_PATH` pointing to your Qt installation.
-- **App runs but shows nothing**:
-  - Verify `MainWindow::drawMaze(...)` is being called (it is at startup and during timer ticks).
-- **Logs not created**:
-  - The logger uses `../micromouse.log` paths; run the program from `build/` or adjust paths in `main.cpp`.
-
-## Roadmap / ideas
-
-- Add a dedicated **settings panel** (maze size, speed, algorithm selection).
-- Add more maze generation algorithms and multiple test mazes.
-- Add performance stats (steps, time, path length) and export results.
-- Improve the UI layout in `mainwindow.ui` (currently minimal) and add status widgets.
-
-## License
-
-No license file is currently included in this repository. If you intend to make the project reusable by others, consider adding a license (e.g. MIT/BSD/Apache-2.0).
